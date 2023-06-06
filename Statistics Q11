@@ -1,0 +1,50 @@
+import pandas as pd
+import scipy.stats as stats
+
+# Load the dataset from Google Sheets
+url = 'https://docs.google.com/spreadsheets/d/1iLSc68B95hOgIjCANOD5ZoSJoX3KDXSJ3SEaFEuLf-M/export?format=csv'
+data = pd.read_csv(url)
+
+# Extract the feature column and class column
+feature = data['Blood Pressure Before (mmHg)']
+classes = data['Blood Pressure After (mmHg)']
+
+# a. Check if the distributions of all classes are the same
+f_statistic, p_value = stats.f_oneway(feature[classes == 'Class A'],
+                                     feature[classes == 'Class B'],
+                                     feature[classes == 'Class C'])
+
+# Print the results
+print(f"a. Analysis of Variance (ANOVA):\nF-Statistic: {f_statistic}\np-value: {p_value}")
+if p_value > 0.05:
+    print("The distributions of all classes are the same.")
+else:
+    print("The distributions of all classes are not the same.")
+
+# b. Check for equality of variance
+levene_statistic, levene_p_value = stats.levene(feature[classes == 'Class A'],
+                                               feature[classes == 'Class B'],
+                                               feature[classes == 'Class C'])
+
+# Print the results
+print(f"\nb. Levene's Test:\nStatistic: {levene_statistic}\np-value: {levene_p_value}")
+if levene_p_value > 0.05:
+    print("The variances are equal across all classes.")
+else:
+    print("The variances are not equal across all classes.")
+
+# c. Compare LDA and QDA performance
+# ... perform LDA and QDA classification on the data and evaluate their performance ...
+# ... the choice of LDA or QDA depends on the specific characteristics of the data and assumptions made in each method ...
+
+# d. Check the equality of mean between all classes
+class_a_mean = feature[classes == 'Class A'].mean()
+class_b_mean = feature[classes == 'Class B'].mean()
+class_c_mean = feature[classes == 'Class C'].mean()
+
+# Print the results
+print(f"\nd. Mean Comparison:\nClass A mean: {class_a_mean}\nClass B mean: {class_b_mean}\nClass C mean: {class_c_mean}")
+if class_a_mean == class_b_mean == class_c_mean:
+    print("The means of all classes are equal.")
+else:
+    print("The means of all classes are not equal.")
