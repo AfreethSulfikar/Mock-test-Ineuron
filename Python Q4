@@ -1,0 +1,42 @@
+
+	import requests
+import pandas as pd
+
+def download_data(url):
+    response = requests.get(url)
+    data = response.json()
+    return data
+
+def process_data(data):
+    processed_data = []
+    for meteorite in data:
+        entry = {
+            'Name of Earth Meteorite': meteorite.get('name', ''),
+            'ID of Earth Meteorite': meteorite.get('id', ''),
+            'Name Type': meteorite.get('nametype', ''),
+            'Recclass': meteorite.get('recclass', ''),
+            'Mass (g)': meteorite.get('mass', ''),
+            'Year': meteorite.get('year', ''),
+            'Latitude': meteorite.get('reclat', ''),
+            'Longitude': meteorite.get('reclong', ''),
+            'Coordinates': [meteorite.get('reclat', ''), meteorite.get('reclong', '')]
+        }
+        processed_data.append(entry)
+    return processed_data
+
+def save_as_csv(data, filename):
+    df = pd.DataFrame(data)
+    df.to_csv(filename, index=False)
+
+# Download the data from the provided link
+url = "https://data.nasa.gov/resource/y77d-th95.json"
+meteorite_data = download_data(url)
+
+# Process the data
+processed_data = process_data(meteorite_data)
+
+# Save the data as a CSV file
+csv_filename = "meteorite_data.csv"
+save_as_csv(processed_data, csv_filename)
+
+print("Data has been downloaded, processed, and saved in", csv_filename)
