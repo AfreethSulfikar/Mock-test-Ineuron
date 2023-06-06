@@ -1,0 +1,25 @@
+def is_valid_string(s):
+    char_freq = {}
+    for char in s:
+        char_freq[char] = char_freq.get(char, 0) + 1
+    freq_freq = {}
+    for freq in char_freq.values():
+        freq_freq[freq] = freq_freq.get(freq, 0) + 1
+    if len(freq_freq) == 1:
+        return "YES"
+    if len(freq_freq) > 2:
+        return "NO"
+    freq1, freq2 = freq_freq.keys()
+    if (freq_freq[freq1] == 1 and freq1 == 1) or (freq_freq[freq2] == 1 and freq2 == 1):
+        return "YES"
+
+    if abs(freq1 - freq2) == 1 and (freq_freq[freq1] == 1 or freq_freq[freq2] == 1):
+        return "YES"
+    return "NO"
+string1 = "abc"
+result1 = is_valid_string(string1)
+print(result1)  # YES
+
+string2 = "abcc"
+result2 = is_valid_string(string2)
+print(result2)  # NO
