@@ -1,0 +1,26 @@
+import pandas as pd
+import urllib
+
+# Download the CSV file from the Google Sheets link
+url = 'https://docs.google.com/spreadsheets/d/1iLSc68B95hOgIjCANOD5ZoSJoX3KDXSJ3SEaFEuLf-M/export?format=csv'
+filename = 'blood_pressure_data.csv'
+urllib.request.urlretrieve(url, filename)
+
+# Load the dataset
+data = pd.read_csv(filename)
+
+# Extract the blood pressure change data
+bp_change = data['Blood Pressure Before (mmHg)'] - data['Blood Pressure After (mmHg)']
+
+# Perform Shapiro-Wilk test
+statistic, p_value = stats.shapiro(bp_change)
+
+# Print the results
+print(f"Shapiro-Wilk Test:\nStatistic: {statistic}\np-value: {p_value}")
+
+# Check the decision
+alpha = 0.05
+if p_value > alpha:
+    print("The change in blood pressure follows a normal distribution.")
+else:
+    print("The change in blood pressure does not follow a normal distribution.")
